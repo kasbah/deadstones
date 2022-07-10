@@ -1,7 +1,7 @@
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
 
-const _dirname = typeof __dirname !== 'undefined'
+const __dirname = typeof __dirname !== 'undefined'
   ? __dirname
   : dirname(fileURLToPath(import.meta.url));
 
@@ -132,9 +132,10 @@ const make = wasm => {
     return result
 }
 
+
 const imports = {}
 
-module.exports = exports = (async () => {
+export default (async () => {
     let wasm
 
     try {
@@ -150,6 +151,7 @@ module.exports = exports = (async () => {
 
         wasm = await WebAssembly.instantiate(buffer, imports)
     } catch (err) {
+        console.warn(err)
         let response = await fetch(exports.fetchPath)
 
         try {
@@ -163,4 +165,3 @@ module.exports = exports = (async () => {
     return make(wasm.instance.exports)
 })()
 
-exports.fetchPath = null
